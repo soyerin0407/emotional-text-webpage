@@ -1,0 +1,17 @@
+const { generateEmotionalText } = require("../services/openaiService");
+
+exports.generateText = async (req, res) => {
+  try {
+    const { text } = req.body;
+
+    if (!text) {
+      return res.status(400).json({ message: "텍스트를 입력하세요." });
+    }
+
+    const result = await generateEmotionalText(text);
+    return res.json({ result });
+  } catch (error) {
+    console.error("gptController error:", error);
+    return res.status(500).json({ message: "서버 오류 발생" });
+  }
+};

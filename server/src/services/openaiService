@@ -1,0 +1,32 @@
+const OpenAI = require("openai");
+
+const client = new OpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+  timeout: 120_000, //
+  maxRetries: 2     // ✅ 네트워크 흔들릴 때 도움
+});
+
+exports.generateEmotionalText = async (text) => {
+  try {
+    const resp = await client.chat.completions.create({
+      model: "gpt-4o-mini",
+      messages: [
+        { role: "user", content: "다음 문장을 감성적으로 다시 써줘:\n${text}" },
+      ],
+      max_tokens: 200,
+      temperature: 0.8,
+    });
+
+    return resp.choices?.[0]?.message?.content ?? "";
+  } catch (err) {
+    // 원인 파악용 로그
+    console.error("openaiService error:", {
+      name: err?.name,
+      message: err?.message,
+      code: err?.code,
+      cause: err?.cause?.code || err?.cause?.message,
+      status: err?.status,
+    });
+    throw err;
+  }
+};

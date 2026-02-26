@@ -1,0 +1,6 @@
+POST http://localhost:5000/api/gpt
+Content-Type: application/json
+
+{
+  "text": "오늘 너무 힘들어"
+}

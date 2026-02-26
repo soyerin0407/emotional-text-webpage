@@ -1,0 +1,19 @@
+require("dotenv").config();
+
+// ✅ 이 블록을 추가
+const { Agent, setGlobalDispatcher } = require("undici");
+setGlobalDispatcher(
+  new Agent({
+    connectTimeout: 30_000,
+    headersTimeout: 120_000, // ⭐ 헤더 타임아웃 늘림
+    bodyTimeout: 120_000,
+  })
+);
+
+const app = require("./src/app");
+
+const PORT = 5000;
+
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on http://localhost:${PORT}`);
+});
